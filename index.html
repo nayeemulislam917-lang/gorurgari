@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GorurGari – Request a cow or horse ride</title>
+<meta name="description" content="GorurGari: request a cow or a horse and your rider arrives to pick you up.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐄</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#000;--paper:#fff;--grey:#f3f3f3;--mid:#6b6b6b;--line:#e2e2e2;--hay:#f4c542;--r:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+:focus-visible{outline:3px solid var(--hay);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+/* nav */
+header{background:var(--ink);color:#fff;position:sticky;top:0;z-index:10}
+.nav{display:flex;align-items:center;gap:32px;height:64px}
+.logo{font-weight:800;font-size:24px;letter-spacing:-.03em}
+.nav ul{display:flex;gap:6px;list-style:none;margin-right:auto}
+.nav ul a{padding:8px 14px;border-radius:99px;font-weight:500;font-size:15px}
+.nav ul a:hover{background:#2a2a2a}
+.pill{display:inline-block;padding:9px 16px;border-radius:99px;font-weight:500;font-size:15px;border:0;cursor:pointer}
+.pill.light{background:#fff;color:#000}
+.pill.ghost{color:#fff}
+.pill.ghost:hover{background:#2a2a2a}
+/* hero */
+.hero{padding:56px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+h1{font-size:clamp(40px,6vw,64px);line-height:1.08;letter-spacing:-.035em;font-weight:800;margin-bottom:28px}
+.lead{color:var(--mid);font-size:18px;margin-bottom:28px;max-width:46ch}
+.field{display:flex;align-items:center;gap:12px;background:var(--grey);border-radius:var(--r);padding:0 16px;margin-bottom:12px;border:2px solid transparent}
+.field:focus-within{border-color:#000;background:#fff}
+.field input{flex:1;border:0;background:transparent;height:52px;font-size:16px;outline:0;min-width:0}
+.dot{width:9px;height:9px;background:#000;border-radius:50%;flex:none}
+.sq{width:9px;height:9px;background:#000;flex:none}
+.pick{display:flex;gap:8px;margin:16px 0 20px}
+.pick label{flex:1;cursor:pointer}
+.pick input{position:absolute;opacity:0}
+.pick span{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:var(--r);padding:10px 14px;font-weight:700}
+.pick svg{width:36px;height:36px;flex:none}
+.pick input:checked+span{border-color:#000;background:#000;color:#fff}
+.pick input:focus-visible+span{outline:3px solid var(--hay);outline-offset:2px}
+.btn{background:#000;color:#fff;border:0;border-radius:var(--r);height:52px;padding:0 28px;font-weight:700;font-size:16px;cursor:pointer}
+.btn:hover{background:#262626}
+.est{margin-top:20px;border:2px solid #000;border-radius:var(--r);overflow:hidden}
+.est[hidden]{display:none}
+.est div{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.est div:last-child{border:0}
+.est svg{width:44px;height:44px;flex:none}
+.est b{display:block}.est small{color:var(--mid)}
+.est .p{margin-left:auto;font-weight:800;font-size:20px}
+.est .go{margin-left:12px;background:#000;color:#fff;border-radius:99px;padding:8px 14px;font-size:14px;font-weight:700;border:0;cursor:pointer}
+.msg{margin-top:12px;font-weight:700}
+/* hero art */
+.art{background:var(--hay);border-radius:16px;aspect-ratio:1/1;position:relative;overflow:hidden;display:grid;place-items:center}
+.art svg.big{width:78%;height:auto}
+.tag{position:absolute;background:#000;color:#fff;border-radius:99px;padding:8px 14px;font-weight:700;font-size:14px}
+.tag.a{left:6%;top:8%}.tag.b{right:6%;bottom:9%;background:#fff;color:#000}
+.hoof{animation:bob 2.6s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes bob{50%{transform:translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){.hoof{animation:none}html{scroll-behavior:auto}}
+/* sections */
+section{padding:72px 0}
+h2{font-size:clamp(30px,4vw,40px);letter-spacing:-.03em;line-height:1.15;font-weight:800;margin-bottom:12px}
+.sub{color:var(--mid);font-size:18px;margin-bottom:40px;max-width:60ch}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{background:var(--grey);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:6px;min-height:230px}
+.card svg{width:84px;height:84px;margin-bottom:auto}
+.card h3{font-size:20px;letter-spacing:-.01em}
+.card p{color:var(--mid);font-size:15px}
+.card .new{align-self:flex-start;background:#000;color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.split.rev .txt{order:2}
+.panel{background:var(--grey);border-radius:16px;min-height:340px;display:grid;place-items:center;padding:32px}
+.panel.dark{background:#000;color:#fff}
+.link{display:inline-block;border-bottom:2px solid #000;font-weight:700;padding-bottom:2px;margin-top:20px}
+.facts{list-style:none;display:grid;gap:18px}
+.facts li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start}
+.facts i{font-style:normal;background:var(--hay);color:#000;font-weight:800;border-radius:50%;width:44px;height:44px;display:grid;place-items:center}
+.facts b{display:block;font-size:18px}
+.facts span{color:var(--mid)}
+.band{background:var(--grey)}
+.cta{background:#000;color:#fff;border-radius:16px;padding:56px;display:flex;gap:32px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.cta h2{margin:0;max-width:18ch}
+.cta .btn{background:#fff;color:#000}
+/* footer */
+footer{background:#000;color:#fff;padding:64px 0 40px}
+.fgrid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:32px;margin-top:32px}
+footer h4{font-size:15px;margin-bottom:14px}
+footer ul{list-style:none;display:grid;gap:10px;color:#c9c9c9;font-size:15px}
+footer a:hover{color:#fff;text-decoration:underline}
+.legal{border-top:1px solid #2e2e2e;margin-top:48px;padding-top:24px;color:#9a9a9a;font-size:14px}
+@media (max-width:900px){
+ .hero .wrap,.split{grid-template-columns:1fr}
+ .split.rev .txt{order:0}
+ .grid4{grid-template-columns:1fr 1fr}
+ .nav ul{display:none}.nav{justify-content:space-between}
+ .fgrid{grid-template-columns:1fr 1fr}
+ .cta{padding:32px}
+}
+@media (max-width:520px){.grid4{grid-template-columns:1fr}.est div{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <symbol id="cow" viewBox="0 0 100 100">
+   <path d="M22 30 8 18c-3 10 2 20 12 22zM78 30l14-12c3 10-2 20-12 22z" fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+   <path d="M20 40 6 44c2 8 10 12 18 8zM80 40l14 4c-2 8-10 12-18 8z" fill="#000"/>
+   <path d="M26 26c8-8 40-8 48 0 6 14 4 30-4 42H30C22 56 20 40 26 26z" fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+   <path d="M30 28c6-4 14-4 18 2-2 10-10 14-18 10z" fill="#000"/>
+   <rect x="26" y="58" width="48" height="30" rx="14" fill="#f2b6c0" stroke="#000" stroke-width="4"/>
+   <circle cx="40" cy="73" r="3.5" fill="#000"/><circle cx="60" cy="73" r="3.5" fill="#000"/>
+   <circle cx="38" cy="44" r="4" fill="#000"/><circle cx="62" cy="44" r="4" fill="#000"/>
+  </symbol>
+  <symbol id="horse" viewBox="0 0 100 100">
+   <path d="M34 8 30 26 44 18zM60 12l-4 14 14-4z" fill="#000"/>
+   <path d="M34 20c14-10 34-6 38 12l6 36c1 10-6 20-16 20H40c-10 0-16-8-14-18l8-26c-8-8-10-16 0-24z" fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+   <path d="M62 14c8 8 12 20 12 34l-6 4c0-14-4-24-12-30z" fill="#000"/>
+   <path d="M62 14c-6 4-8 14-6 24l-8-4c-2-12 2-20 8-26z" fill="#000" opacity=".85"/>
+   <ellipse cx="38" cy="82" rx="20" ry="9" fill="#e8d5b5" stroke="#000" stroke-width="4"/>
+   <circle cx="30" cy="82" r="2.8" fill="#000"/><circle cx="42" cy="82" r="2.8" fill="#000"/>
+   <circle cx="48" cy="38" r="4" fill="#000"/>
+  </symbol>
+ </defs>
+</svg>
+
+<header>
+ <div class="wrap nav">
+  <a class="logo" href="#top" aria-label="GorurGari home">GorurGari</a>
+  <ul>
+   <li><a href="#ride">Ride</a></li>
+   <li><a href="#drive">Drive</a></li>
+   <li><a href="#safety">Safety</a></li>
+   <li><a href="#about">About</a></li>
+  </ul>
+  <a class="pill ghost" href="#login">Log in</a>
+  <a class="pill light" href="#signup">Sign up</a>
+ </div>
+</header>
+
+<main id="top">
+<div class="hero">
+ <div class="wrap">
+  <div>
+   <h1>Go anywhere with a cow or a horse</h1>
+   <p class="lead">Request a ride, and your rider arrives on four legs. No traffic jams, no fuel, just fresh air and a gentle pace.</p>
+   <div class="field"><span class="dot"></span><input id="from" placeholder="Pickup location" autocomplete="off" aria-label="Pickup location"></div>
+   <div class="field"><span class="sq"></span><input id="to" placeholder="Dropoff location" autocomplete="off" aria-label="Dropoff location"></div>
+   <div class="pick" role="radiogroup" aria-label="Choose your animal">
+    <label><input type="radio" name="ani" value="cow" checked><span><svg><use href="#cow"/></svg>Cow</span></label>
+    <label><input type="radio" name="ani" value="horse"><span><svg><use href="#horse"/></svg>Horse</span></label>
+   </div>
+   <button class="btn" id="see" type="button">See prices</button>
+   <div class="est" id="est" hidden aria-live="polite"></div>
+   <p class="msg" id="msg" role="status"></p>
+  </div>
+  <div class="art" aria-hidden="true">
+   <span class="tag a">Arriving in 6 min</span>
+   <svg class="big hoof" viewBox="0 0 200 120"><use href="#cow" x="0" y="0" width="110" height="110"/><use href="#horse" x="90" y="10" width="110" height="110"/></svg>
+   <span class="tag b">Pickup: Road 5, Dhanmondi</span>
+  </div>
+ </div>
+</div>
+
+<section id="ride" class="band">
+ <div class="wrap">
+  <h2>Choose how you travel</h2>
+  <p class="sub">Every ride comes with a trained rider, a saddle or cart, and a name tag for your animal.</p>
+  <div class="grid4">
+   <div class="card"><svg><use href="#cow"/></svg><h3>Cow</h3><p>Slow, steady and calm. Best for short trips and big bags.</p></div>
+   <div class="card"><svg><use href="#horse"/></svg><h3>Horse</h3><p>Quick and elegant. Best when you are running late.</p></div>
+   <div class="card"><svg><use href="#cow"/></svg><span class="new">New</span><h3>Cow Cart</h3><p>A cart pulled by a cow, with seats for up to 4 people.</p></div>
+   <div class="card"><svg><use href="#horse"/></svg><span class="new">New</span><h3>Horse Express</h3><p>A fast horse with a priority route across town.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="drive">
+ <div class="wrap split">
+  <div class="panel dark"><svg style="width:220px;height:220px"><use href="#horse"/></svg></div>
+  <div class="txt">
+   <h2>Ride with your own animal</h2>
+   <p class="sub">Have a cow or a horse at home? Sign up as a rider, set your own hours, and earn every time someone needs a lift.</p>
+   <a class="btn" style="display:inline-grid;place-items:center" href="#signup">Get started</a><br>
+   <a class="link" href="#login">Already have an account? Sign in</a>
+  </div>
+ </div>
+</section>
+
+<section id="safety" class="band">
+ <div class="wrap split rev">
+  <div class="txt">
+   <h2>Your safety comes first</h2>
+   <p class="sub">We look after every passenger and every animal on every trip.</p>
+   <ul class="facts">
+    <li><i>1</i><div><b>Trained riders</b><span>Every rider completes handling and road-safety training.</span></div></li>
+    <li><i>2</i><div><b>Healthy animals</b><span>Vets check every cow and horse each month.</span></div></li>
+    <li><i>3</i><div><b>Share your trip</b><span>Send your live location to a friend with one tap.</span></div></li>
+   </ul>
+  </div>
+  <div class="panel"><svg style="width:220px;height:220px"><use href="#cow"/></svg></div>
+ </div>
+</section>
+
+<section id="about">
+ <div class="wrap">
+  <h2>Why GorurGari</h2>
+  <p class="sub">The name means “bullock cart” in Bengali. We took the oldest ride in the country and put a button on it.</p>
+  <div class="grid4">
+   <div class="card"><h3>Zero fuel</h3><p>Grass and water power every trip.</p></div>
+   <div class="card"><h3>Zero horns</h3><p>Well, not zero for the cows. But no car horns.</p></div>
+   <div class="card"><h3>Pay your way</h3><p>Cash, bKash, Nagad or card.</p></div>
+   <div class="card"><h3>Fair fares</h3><p>See the price before you request.</p></div>
+  </div>
+ </div>
+</section>
+
+<section style="padding-top:0">
+ <div class="wrap">
+  <div class="cta" id="signup">
+   <h2>Your ride is waiting in the field</h2>
+   <button class="btn" type="button" onclick="document.getElementById('from').focus();window.scrollTo({top:0,behavior:'smooth'})">Request a ride</button>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="wrap">
+  <a class="logo" href="#top">GorurGari</a>
+  <div class="fgrid">
+   <div><p style="color:#c9c9c9;max-width:30ch">Rides on cows and horses, wherever you are in Bangladesh.</p></div>
+   <div><h4>Company</h4><ul><li><a href="#about">About us</a></li><li><a href="#drive">Careers</a></li><li><a href="#about">Newsroom</a></li></ul></div>
+   <div><h4>Products</h4><ul><li><a href="#ride">Ride</a></li><li><a href="#drive">Drive</a></li><li><a href="#ride">Cow Cart</a></li></ul></div>
+   <div><h4>Help</h4><ul><li><a href="#safety">Safety</a></li><li><a href="#login">Support</a></li><li><a href="#login">Contact us</a></li></ul></div>
+  </div>
+  <p class="legal">© 2026 GorurGari. All rights reserved. Privacy · Terms · Accessibility</p>
+ </div>
+</footer>
+
+<script>
+(function(){
+ var see=document.getElementById('see'),est=document.getElementById('est'),msg=document.getElementById('msg');
+ function km(a,b){var s=(a+'|'+b).toLowerCase(),h=0;for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))%97}return 1.2+h/12}
+ function row(type,name,speed,dist,rate,base){
+  var mins=Math.round(dist/speed*60)+4,price=Math.round(base+dist*rate);
+  return '<div><svg><use href="#'+type+'"/></svg><span><b>'+name+'</b><small>'+mins+' min trip · '+dist.toFixed(1)+' km</small></span><span class="p">৳'+price+'</span><button class="go" type="button" data-n="'+name+'">Request</button></div>'}
+ see.addEventListener('click',function(){
+  var a=document.getElementById('from').value.trim(),b=document.getElementById('to').value.trim();
+  msg.textContent='';
+  if(!a||!b){est.hidden=true;msg.textContent='Enter a pickup and dropoff location to see prices.';return}
+  var d=km(a,b),pick=document.querySelector('input[name=ani]:checked').value;
+  var cow=row('cow','Cow',6,d,38,30),horse=row('horse','Horse',16,d,64,50);
+  est.innerHTML=pick==='cow'?cow+horse:horse+cow;
+  est.hidden=false});
+ est.addEventListener('click',function(e){
+  var t=e.target.closest('.go');if(!t)return;
+  msg.textContent=t.dataset.n+' requested. Your rider will arrive in about 6 minutes.'});
+})();
+</script>
+</body>
+</html>
